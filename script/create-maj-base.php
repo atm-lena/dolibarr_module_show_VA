@@ -28,11 +28,11 @@ if(!defined('INC_FROM_DOLIBARR')) {
 }
 
 
-/* uncomment
+
 
 
 dol_include_once('/show/class/show.class.php');
 
 $o=new show($db);
 $o->init_db_by_vars();
-*/
+
