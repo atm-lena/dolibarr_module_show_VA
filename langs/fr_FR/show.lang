@@ -31,12 +31,12 @@ showStatusRefusedShort=Refusée
 showStatusAcceptedShort=Acceptée
 
 # LIST
-showList=Liste show
+showList=Liste de spectacles
 Noshow=(vide)
 
 # CARD
-Newshow=Création show
-showCard=Fiche show
+Newshow=Création d'un spectacle
+showCard=Fiche spectacle
 
 showModify=Modifier
 showClone=Cloner
