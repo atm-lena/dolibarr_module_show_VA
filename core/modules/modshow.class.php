@@ -210,7 +210,7 @@ class modshow extends DolibarrModules
 		// Add here entries to declare new menus
 		//
 		// Example to declare a new Top Menu entry and its Left menu entry:
-		 $this->menu[$r]=array(	'fk_menu'=>'fk_mainmenu=show',		// Put 0 if this is a single top menu or keep fk_mainmenu to give an entry on left
+		 $this->menu[$r]=array(	'fk_menu'=>'',		// Put 0 if this is a single top menu or keep fk_mainmenu to give an entry on left
 									'type'=>'top',			                // This is a Top menu entry
 									'titre'=>'Spectacles',
 									'mainmenu'=>'show',
@@ -223,6 +223,47 @@ class modshow extends DolibarrModules
 									'target'=>'',
 									'user'=>2);				                // 0=Menu for internal users, 1=external users, 2=both
 		 $r++;
+
+        $this->menu[$r++]=array(
+            'fk_menu'=>'fk_mainmenu=show',	    // '' if this is a top menu. For left menu, use 'fk_mainmenu=xxx' or 'fk_mainmenu=xxx,fk_leftmenu=yyy' where xxx is mainmenucode and yyy is a leftmenucode
+            'type'=>'left',			                // This is a Left menu entry
+            'titre'=> 'Spectacle',
+            'mainmenu'=>'show',
+            'leftmenu'=>'show_show',
+            'langs'=>'show@show',	        // Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
+            'position'=>1100+$r,
+            'enabled'=>'$conf->show->enabled',  // Define condition to show or hide menu entry. Use '$conf->modulespectacle->enabled' if entry must be visible if module is enabled. Use '$leftmenu==\'system\'' to show if leftmenu system is selected.
+            'perms'=>'1',			                // Use 'perms'=>'$user->rights->modulespectacle->level1->level2' if you want your menu with a permission rules
+            'target'=>'',
+            'user'=>2); // 0=Menu for internal users, 1=external users, 2=both
+
+        $this->menu[$r++]=array(
+            'fk_menu'=>'fk_mainmenu=show,fk_leftmenu=show_show',	    // '' if this is a top menu. For left menu, use 'fk_mainmenu=xxx' or 'fk_mainmenu=xxx,fk_leftmenu=yyy' where xxx is mainmenucode and yyy is a leftmenucode
+            'type'=>'left',			                // This is a Left menu entry
+            'titre'=>'Nouveau spectacle',
+            'mainmenu'=>'show',
+            'leftmenu'=>'show_show_new',
+            'url'=>'/show/card.php?action=create',
+            'langs'=>'show@show',	        // Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
+            'position'=>1100+$r,
+            'enabled'=>'$conf->show->enabled',  // Define condition to show or hide menu entry. Use '$conf->modulespectacle->enabled' if entry must be visible if module is enabled. Use '$leftmenu==\'system\'' to show if leftmenu system is selected.
+            'perms'=>'1',			                // Use 'perms'=>'$user->rights->modulespectacle->level1->level2' if you want your menu with a permission rules
+            'target'=>'',
+            'user'=>2);
+
+        $this->menu[$r++]=array(
+            'fk_menu'=>'fk_mainmenu=show,fk_leftmenu=show_show',	    // '' if this is a top menu. For left menu, use 'fk_mainmenu=xxx' or 'fk_mainmenu=xxx,fk_leftmenu=yyy' where xxx is mainmenucode and yyy is a leftmenucode
+            'type'=>'left',			                // This is a Left menu entry
+            'titre'=>$langs->trans('List'),
+            'mainmenu'=>'show',
+            'leftmenu'=>'show_show_show',
+            'url'=>'/show/list.php',
+            'langs'=>'show@show',	        // Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
+            'position'=>1100+$r,
+            'enabled'=>'$conf->show->enabled',  // Define condition to show or hide menu entry. Use '$conf->modulespectacle->enabled' if entry must be visible if module is enabled. Use '$leftmenu==\'system\'' to show if leftmenu system is selected.
+            'perms'=>'1',			                // Use 'perms'=>'$user->rights->modulespectacle->level1->level2' if you want your menu with a permission rules
+            'target'=>'',
+            'user'=>2);	// 0=Menu for internal users, 1=external users, 2=both
 		//
 		// Example to declare a Left Menu entry into an existing Top menu entry:
 		// $this->menu[$r]=array(	'fk_menu'=>'fk_mainmenu=show,fk_leftmenu=show_left',		    // Use 'fk_mainmenu=xxx' or 'fk_mainmenu=xxx,fk_leftmenu=yyy' where xxx is mainmenucode and yyy is a leftmenucode
