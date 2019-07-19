@@ -146,21 +146,21 @@ class modshow extends DolibarrModules
         	$conf->show->enabled=0;
         }
 		$this->dictionaries=array();
-        /* Example:
+
         if (! isset($conf->show->enabled)) $conf->show->enabled=0;	// This is to avoid warnings
         $this->dictionaries=array(
             'langs'=>'show@show',
-            'tabname'=>array(MAIN_DB_PREFIX."table1",MAIN_DB_PREFIX."table2",MAIN_DB_PREFIX."table3"),		// List of tables we want to see into dictonnary editor
-            'tablib'=>array("Table1","Table2","Table3"),													// Label of tables
-            'tabsql'=>array('SELECT f.rowid as rowid, f.code, f.label, f.active FROM '.MAIN_DB_PREFIX.'table1 as f','SELECT f.rowid as rowid, f.code, f.label, f.active FROM '.MAIN_DB_PREFIX.'table2 as f','SELECT f.rowid as rowid, f.code, f.label, f.active FROM '.MAIN_DB_PREFIX.'table3 as f'),	// Request to select fields
-            'tabsqlsort'=>array("label ASC","label ASC","label ASC"),																					// Sort order
-            'tabfield'=>array("code,label","code,label","code,label"),																					// List of fields (result of select to show dictionary)
-            'tabfieldvalue'=>array("code,label","code,label","code,label"),																				// List of fields (list of fields to edit a record)
-            'tabfieldinsert'=>array("code,label","code,label","code,label"),																			// List of fields (list of fields for insert)
-            'tabrowid'=>array("rowid","rowid","rowid"),																									// Name of columns with primary key (try to always name it 'rowid')
-            'tabcond'=>array($conf->show->enabled,$conf->show->enabled,$conf->show->enabled)												// Condition to show each dictionary
+            'tabname'=>array(MAIN_DB_PREFIX."c_show_category"),		// List of tables we want to see into dictonnary editor
+            'tablib'=>array("Category"),													// Label of tables
+            'tabsql'=>array('SELECT f.rowid as rowid, f.label, f.default_price, f.active FROM '.MAIN_DB_PREFIX.'c_show_category as f'),	// Request to select fields
+            'tabsqlsort'=>array("label ASC"),																					// Sort order
+            'tabfield'=>array("label,default_price"),																					// List of fields (result of select to show dictionary)
+            'tabfieldvalue'=>array("label,default_price"),																				// List of fields (list of fields to edit a record)
+            'tabfieldinsert'=>array("label,default_price"),																			// List of fields (list of fields for insert)
+            'tabrowid'=>array("rowid"),																									// Name of columns with primary key (try to always name it 'rowid')
+            'tabcond'=>array($conf->show->enabled)												// Condition to show each dictionary
         );
-        */
+
 
         // Boxes
 		// Add here list of php file(s) stored in core/boxes that contains class to show a box.
