@@ -38,6 +38,6 @@ $o->init_db_by_vars();
 
 dol_include_once('/show/class/showcategory.class.php');
 
-$o=new showcategory($db);
-$o->init_db_by_vars();
+$o2=new showcategory($db);
+$o2->init_db_by_vars();
 

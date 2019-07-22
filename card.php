@@ -192,6 +192,14 @@ if ($action == 'create')
     // Other attributes
     include DOL_DOCUMENT_ROOT . '/core/tpl/extrafields_add.tpl.php';
 
+    if ($conf->categorie->enabled) {
+        // Categories
+        print '<tr><td>'.$langs->trans("Categories").'</td><td colspan="3">';
+        print select_all_categories();
+        print "</td></tr>";
+    }
+
+
     print '</table>'."\n";
 
     dol_fiche_end();
@@ -377,6 +385,58 @@ else
     }
 }
 
+function select_all_categories(){
+    global $db;
+
+    $sql = "SELECT c.rowid, c.label";
+    $sql .= " FROM " . MAIN_DB_PREFIX . "c_show_category as c";
+    $sql .= " ORDER BY c.label";
+    $result = $db->query($sql);
+
+
+    if ($result) {
+        $num = $db->num_rows($result);
+        $i = 0;
+        while ($i < $num) {
+            $objp = $db->fetch_object($result);
+            if ($objp) {
+                $categories[$i]['label'] = $objp->label;
+                $categories[$i]['id'] = $objp->rowid;
+            }
+            $i++;
+        }
+        $db->free($result);
+    } else dol_print_error($db);
+
+    $output = '<select class="flat" name="show_category" id="show_category">';
+    $outarray=array();
+    if (is_array($categories))
+    {
+        if (! count($categories)) $output.= '<option value="-1" disabled>'.$langs->trans("NoCategoriesDefined").'</option>';
+        else
+        {
+            $output.= '<option value="-1">&nbsp;</option>';
+            foreach($categories as $key => $value)
+            {
+                if ($categories[$key]['id'] == $selected || ($selected == 'auto' && count($categories) == 1))
+                {
+                    $add = 'selected ';
+                }
+                else
+                {
+                    $add = '';
+                }
+                $output.= '<option '.$add.'value="'.$categories[$key]['id'].'">'.dol_trunc($categories[$key]['label'],$maxlength,'middle').'</option>';
+
+                $outarray[$categories[$key]['id']] = $categories[$key]['label'];
+            }
+        }
+    }
+    $output.= '</select>';
+    $output.= "\n";
+
+    return $output;
+}
 
 llxFooter();
 $db->close();

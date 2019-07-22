@@ -81,6 +81,7 @@ class show extends SeedObject
 		'import_key'    =>array('type'=>'varchar(14)',  'label'=>'ImportId',         'enabled'=>1, 'visible'=>-2, 'notnull'=>-1, 'index'=>0,  'position'=>1000),
         'price'         =>array('type'=>'double(24,8)', 'label'=>'Price',            'enabled'=>1, 'visible'=>1,  'position'=>41,  'searchall'=>1, 'css'=>'minwidth200'),
         'date'         => array('type'=>'datetime', 'label'=>'Date', 'enabled'=>1, 'visible'=>1, 'position'=>32, 'notnull'=>-1, 'comment'=>"Date of show",),
+        'fk_c_show_category' 		=>array('type'=>'integer', 'label'=>'Category', 'visible'=>0, 'enabled'=>1, 'position'=>50),
     );
 
     /** @var string $ref Object reference */
@@ -100,6 +101,8 @@ class show extends SeedObject
 
     /** @var datetime $label Object date */
     public $date;
+
+    public $fk_c_show_category;
 
 
 
@@ -125,6 +128,13 @@ class show extends SeedObject
      */
     public function save($user)
     {
+        if(isset($_POST['show_category']) && $_POST['show_category'] != '-1'){
+            $this->fk_c_show_category = $_POST['show_category'];
+
+        } else {
+            $this->fk_c_show_category = '';
+        }
+
         if (!empty($this->is_clone))
         {
             // TODO determinate if auto generate
