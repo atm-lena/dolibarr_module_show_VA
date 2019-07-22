@@ -51,10 +51,14 @@ if (!GETPOST('confirmmassaction', 'alpha') && $massaction != 'presend' && $massa
     $massaction = '';
 }
 
-
 if (empty($reshook))
 {
-	// do action from GETPOST ... 
+	if($massaction == 'delete') {
+	    foreach ($toselect as $key=>$value){
+	        $object->fetch($toselect[$key]);
+	        $object->delete($user);
+        }
+    }
 }
 
 
@@ -119,7 +123,7 @@ echo $r->render($sql, array(
         ,'messageNothing' => $langs->trans('Noshow')
         ,'picto_search' => img_picto('', 'search.png', '', 0)
         ,'massactions'=>array(
-            'yourmassactioncode'  => $langs->trans('YourMassActionLabel')
+            'delete'  => $langs->trans('Delete')
         )
     )
 	,'subQuery' => array()
