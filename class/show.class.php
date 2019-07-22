@@ -128,13 +128,6 @@ class show extends SeedObject
      */
     public function save($user)
     {
-        if(isset($_POST['show_category']) && $_POST['show_category'] != '-1'){
-            $this->fk_c_show_category = $_POST['show_category'];
-
-        } else {
-            $this->fk_c_show_category = '';
-        }
-
         if (!empty($this->is_clone))
         {
             // TODO determinate if auto generate

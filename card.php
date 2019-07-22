@@ -70,7 +70,8 @@ if (empty($reshook))
 	$error = 0;
 	switch ($action) {
 		case 'add':
-		case 'update':
+            $object->setValues($_REQUEST);
+        case 'update':
 			$object->setValues($_REQUEST); // Set standard attributes
 
             if ($object->isextrafieldmanaged)
@@ -406,7 +407,7 @@ function select_all_categories($selected=''){
         $i++;
     }
 
-    $output = '<select class="flat" name="show_category" id="show_category">';
+    $output = '<select class="flat" name="fk_c_show_category" id="show_category">';
     $outarray=array();
     if (is_array($categories))
     {
