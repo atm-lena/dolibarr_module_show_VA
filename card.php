@@ -19,6 +19,7 @@ require 'config.php';
 require_once DOL_DOCUMENT_ROOT.'/core/lib/functions.lib.php';
 require_once DOL_DOCUMENT_ROOT.'/core/class/html.form.class.php';
 dol_include_once('show/class/show.class.php');
+dol_include_once('show/class/showcategory.class.php');
 dol_include_once('show/lib/show.lib.php');
 
 if(empty($user->rights->show->read)) accessforbidden();
@@ -386,27 +387,17 @@ else
 }
 
 function select_all_categories(){
+
     global $db;
 
-    $sql = "SELECT c.rowid, c.label";
-    $sql .= " FROM " . MAIN_DB_PREFIX . "c_show_category as c";
-    $sql .= " ORDER BY c.label";
-    $result = $db->query($sql);
+    $category = new showcategory($db);
 
-
-    if ($result) {
-        $num = $db->num_rows($result);
-        $i = 0;
-        while ($i < $num) {
-            $objp = $db->fetch_object($result);
-            if ($objp) {
-                $categories[$i]['label'] = $objp->label;
-                $categories[$i]['id'] = $objp->rowid;
-            }
-            $i++;
-        }
-        $db->free($result);
-    } else dol_print_error($db);
+    $i = 0;
+    foreach($category->fetchAll() as $line) {
+        $categories[$i]['label'] = $line->label;
+        $categories[$i]['id'] = $line->id;
+        $i++;
+    }
 
     $output = '<select class="flat" name="show_category" id="show_category">';
     $outarray=array();
