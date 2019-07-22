@@ -193,8 +193,8 @@ if ($action == 'create')
     // Other attributes
     include DOL_DOCUMENT_ROOT . '/core/tpl/extrafields_add.tpl.php';
 
+    // Category attribute
     if ($conf->categorie->enabled) {
-        // Categories
         print '<tr><td>'.$langs->trans("Categories").'</td><td colspan="3">';
         print select_all_categories();
         print "</td></tr>";
@@ -241,6 +241,13 @@ else
 
             // Other attributes
             include DOL_DOCUMENT_ROOT . '/core/tpl/extrafields_edit.tpl.php';
+
+            // Category attribute
+            if ($conf->categorie->enabled) {
+                print '<tr><td>'.$langs->trans("Categories").'</td><td colspan="3">';
+                print select_all_categories($object->fk_c_show_category);
+                print "</td></tr>";
+            }
 
             print '</table>';
 
@@ -386,7 +393,7 @@ else
     }
 }
 
-function select_all_categories(){
+function select_all_categories($selected=''){
 
     global $db;
 
