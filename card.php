@@ -320,12 +320,24 @@ else
             print '<div class="underbanner clearboth"></div>';
             print '<table class="border tableforfield" width="100%">'."\n";
 
+
             // Common attributes
             //$keyforbreak='fieldkeytoswithonsecondcolumn';
             include DOL_DOCUMENT_ROOT . '/core/tpl/commonfields_view.tpl.php';
 
             // Other attributes
             include DOL_DOCUMENT_ROOT . '/core/tpl/extrafields_view.tpl.php';
+
+            // Category attribute
+            $cat = new showcategory($db);
+            $cat->fetch($object->fk_c_show_category);
+            print '<tr>';
+            print '<td class ="titlefield">'.$langs->trans('Category').'</td>';
+            print '<td>';
+            print $cat->label;
+            print '</a></td>';
+            print '</tr>';
+            $object->showOutputField($object->fields, $object->fields, $object->fk_c_show_category);
 
             print '</table>';
 
