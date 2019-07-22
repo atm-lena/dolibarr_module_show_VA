@@ -29,6 +29,8 @@ $langs->load('show@show');
 $action = GETPOST('action');
 $id = GETPOST('id', 'int');
 $ref = GETPOST('ref');
+$price = GETPOST('price');
+$category = GETPOST('show_category');
 
 $contextpage = GETPOST('contextpage', 'aZ') ? GETPOST('contextpage', 'aZ') : 'showcard';   // To manage different context of search
 $backtopage = GETPOST('backtopage', 'alpha');
@@ -70,8 +72,35 @@ if (empty($reshook))
 	$error = 0;
 	switch ($action) {
 		case 'add':
+
+		    global $conf;
+
+		    //Default prices
+		    if($price=='') {
+                if ($category != 0) {
+                    $cat = new showcategory($db);
+                    $cat->fetch($_REQUEST['show_category']);
+                    $_REQUEST['price'] = $cat->default_price;
+                } else {
+                    $_REQUEST['price'] = $conf->global->SHOW_DEFAULTPRICE;
+                }
+            }
+
             $object->setValues($_REQUEST);
+
         case 'update':
+
+            //Default prices
+            if($price=='') {
+                if ($category != 0) {
+                    $cat = new showcategory($db);
+                    $cat->fetch($_REQUEST['show_category']);
+                    $_REQUEST['price'] = $cat->default_price;
+                } else {
+                    $_REQUEST['price'] = $conf->global->SHOW_DEFAULTPRICE;
+                }
+            }
+
 			$object->setValues($_REQUEST); // Set standard attributes
 
             if ($object->isextrafieldmanaged)
@@ -200,7 +229,6 @@ if ($action == 'create')
         print select_all_categories();
         print "</td></tr>";
     }
-
 
     print '</table>'."\n";
 
@@ -396,7 +424,7 @@ else
 
 function select_all_categories($selected=''){
 
-    global $db;
+    global $db, $langs;
 
     $category = new showcategory($db);
 
@@ -407,14 +435,14 @@ function select_all_categories($selected=''){
         $i++;
     }
 
-    $output = '<select class="flat" name="fk_c_show_category" id="show_category">';
-    $outarray=array();
+    $output = '<select class="flat" name="show_category" id="show_category">';
+
     if (is_array($categories))
     {
-        if (! count($categories)) $output.= '<option value="-1" disabled>'.$langs->trans("NoCategoriesDefined").'</option>';
+        if (! count($categories)) $output.= '<option value="0" disabled>'.$langs->trans("NoCategoriesDefined").'</option>';
         else
         {
-            $output.= '<option value="-1">&nbsp;</option>';
+            $output.= '<option value="0">&nbsp;</option>';
             foreach($categories as $key => $value)
             {
                 if ($categories[$key]['id'] == $selected || ($selected == 'auto' && count($categories) == 1))
@@ -425,9 +453,7 @@ function select_all_categories($selected=''){
                 {
                     $add = '';
                 }
-                $output.= '<option '.$add.'value="'.$categories[$key]['id'].'">'.dol_trunc($categories[$key]['label'],$maxlength,'middle').'</option>';
-
-                $outarray[$categories[$key]['id']] = $categories[$key]['label'];
+                $output.= '<option '.$add.'value="'.$categories[$key]['id'].'">'.dol_trunc($categories[$key]['label'],64,'middle').'</option>';
             }
         }
     }

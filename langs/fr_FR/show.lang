@@ -46,3 +46,6 @@ showRefuse=Refuser
 showReopen=Rouvrir
 showCancel=Abandonner
 showDelete=Supprimer
+
+#SETUP
+SHOW_DEFAULTPRICE = Prix par défaut spectacle
