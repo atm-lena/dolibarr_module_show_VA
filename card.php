@@ -31,7 +31,7 @@ $action = GETPOST('action');
 $id = GETPOST('id', 'int');
 $ref = GETPOST('ref');
 $price = GETPOST('price');
-$category = GETPOST('show_category');
+$category = GETPOST('fk_c_show_category');
 $product = GETPOST('product', 'int');
 
 $contextpage = GETPOST('contextpage', 'aZ') ? GETPOST('contextpage', 'aZ') : 'showcard';   // To manage different context of search
@@ -81,7 +81,7 @@ if (empty($reshook))
 		    if($price=='') {
                 if ($category != 0) {
                     $cat = new showcategory($db);
-                    $cat->fetch($_REQUEST['show_category']);
+                    $cat->fetch($category);
                     $_REQUEST['price'] = $cat->default_price;
                 } else {
                     $_REQUEST['price'] = $conf->global->SHOW_DEFAULTPRICE;
@@ -96,7 +96,7 @@ if (empty($reshook))
             if($price=='') {
                 if ($category != 0) {
                     $cat = new showcategory($db);
-                    $cat->fetch($_REQUEST['show_category']);
+                    $cat->fetch($category);
                     $_REQUEST['price'] = $cat->default_price;
                 } else {
                     $_REQUEST['price'] = $conf->global->SHOW_DEFAULTPRICE;
@@ -343,16 +343,29 @@ else
             // Other attributes
             include DOL_DOCUMENT_ROOT . '/core/tpl/extrafields_view.tpl.php';
 
-            // Category attribute
-            $cat = new showcategory($db);
-            $cat->fetch($object->fk_c_show_category);
-            print '<tr>';
-            print '<td class ="titlefield">'.$langs->trans('Category').'</td>';
-            print '<td>';
-            print $cat->label;
-            print '</a></td>';
-            print '</tr>';
-            $object->showOutputField($object->fields, $object->fields, $object->fk_c_show_category);
+            //fk_c_show_category attribute
+            if($object->fk_c_show_category != 0) {
+                $cat = new showcategory($db);
+                $cat->fetch($object->fk_c_show_category);
+                print '<tr>';
+                print '<td class ="titlefield">' . $langs->trans('Category') . '</td>';
+                print '<td>';
+                print $cat->label;
+                print '</a></td>';
+                print '</tr>';
+            }
+
+            //fk_product attribute
+            if($object->fk_product) {
+                $product = new Product($db);
+                $product->fetch($object->fk_product);
+                print '<tr>';
+                print '<td class ="titlefield">Produit associé</td>';
+                print '<td>';
+                print $product->getNomURL();
+                print '</td>';
+                print '</tr>';
+            }
 
             print '</table>';
 
@@ -462,7 +475,7 @@ function select_all_categories($selected=''){
         $i++;
     }
 
-    $output = '<select class="flat" name="show_category" id="show_category">';
+    $output = '<select class="flat" name="fk_c_show_category" id="fk_c_show_category">';
 
     if (is_array($categories))
     {
