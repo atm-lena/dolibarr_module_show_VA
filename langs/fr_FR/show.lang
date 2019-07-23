@@ -49,3 +49,6 @@ showDelete=Supprimer
 
 #SETUP
 SHOW_DEFAULTPRICE = Prix par défaut spectacle
+
+#BUTTONS
+NewShow = Nouveau spectacle

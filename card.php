@@ -21,6 +21,7 @@ require_once DOL_DOCUMENT_ROOT.'/core/class/html.form.class.php';
 dol_include_once('show/class/show.class.php');
 dol_include_once('show/class/showcategory.class.php');
 dol_include_once('show/lib/show.lib.php');
+dol_include_once('product/class/product.class.php');
 
 if(empty($user->rights->show->read)) accessforbidden();
 
@@ -31,6 +32,7 @@ $id = GETPOST('id', 'int');
 $ref = GETPOST('ref');
 $price = GETPOST('price');
 $category = GETPOST('show_category');
+$product = GETPOST('product');
 
 $contextpage = GETPOST('contextpage', 'aZ') ? GETPOST('contextpage', 'aZ') : 'showcard';   // To manage different context of search
 $backtopage = GETPOST('backtopage', 'alpha');
@@ -206,6 +208,17 @@ llxHeader('', $title);
 
 if ($action == 'create')
 {
+
+    //Create a show from a product
+    if($product) {
+        $prod = new Product($db);
+        $prod->fetch($product);
+
+        $_POST['ref'] = $prod->ref;
+        $_POST['label'] = $prod->label;
+        $_POST['price'] = $prod->price;
+    }
+
     print load_fiche_titre($langs->trans('Newshow'), '', 'show@show');
 
     print '<form method="POST" action="'.$_SERVER["PHP_SELF"].'">';

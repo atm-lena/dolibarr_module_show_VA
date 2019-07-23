@@ -25,7 +25,7 @@
 /**
  * Class Actionsshow
  */
-class Actionsshow
+class ActionsShow
 {
     /**
      * @var DoliDb		Database handler (result of a new DoliDB)
@@ -56,6 +56,7 @@ class Actionsshow
 		$this->db = $db;
 	}
 
+
 	/**
 	 * Overloading the doActions function : replacing the parent's function with the one below
 	 *
@@ -65,30 +66,46 @@ class Actionsshow
 	 * @param   HookManager     $hookmanager    Hook manager propagated to allow calling another hook
 	 * @return  int                             < 0 on error, 0 on success, 1 to replace standard code
 	 */
-	public function doActions($parameters, &$object, &$action, $hookmanager)
-	{
-		$error = 0; // Error counter
-		$myvalue = 'test'; // A result value
+//	public function doActions($parameters, &$object, &$action, $hookmanager)
+//	{
+//		$error = 0; // Error counter
+//		$myvalue = 'test'; // A result value
+//
+//		print_r($parameters);
+//		echo "action: " . $action;
+//		print_r($object);
+//
+//		if (in_array('somecontext', explode(':', $parameters['context'])))
+//		{
+//		  // do something only for the context 'somecontext'
+//		}
+//
+//		if (! $error)
+//		{
+//			$this->results = array('myreturn' => $myvalue);
+//			$this->resprints = 'A text to show';
+//			return 0; // or return 1 to replace standard code
+//		}
+//		else
+//		{
+//			$this->errors[] = 'Error message';
+//			return -1;
+//		}
+//	}
 
-		print_r($parameters);
-		echo "action: " . $action;
-		print_r($object);
+    function addMoreActionsButtons($parameters, $object, $action, $hookmanager)
+    {
+        global $langs;
 
-		if (in_array('somecontext', explode(':', $parameters['context'])))
-		{
-		  // do something only for the context 'somecontext'
-		}
+        //Card Product context
+        if($parameters['currentcontext'] == "productcard") {
 
-		if (! $error)
-		{
-			$this->results = array('myreturn' => $myvalue);
-			$this->resprints = 'A text to show';
-			return 0; // or return 1 to replace standard code
-		}
-		else
-		{
-			$this->errors[] = 'Error message';
-			return -1;
-		}
-	}
+            //Add "New Show" button
+            print '<div class="inline-block divButAction">';
+            print("<a class=\"butAction\" href='" . dol_buildpath('/show/card.php', 1) . "?action=create&product=" . $object->id."'>" . $langs->trans('NewShow') . "</a>");
+            print '</div>';
+            return 0;
+        }
+
+    }
 }
