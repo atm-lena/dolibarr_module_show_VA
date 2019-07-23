@@ -33,6 +33,8 @@ showStatusAcceptedShort=Acceptée
 # LIST
 showList=Liste de spectacles
 Noshow=(vide)
+DateCre=Date de création
+DateMaj=Date de mise à jour
 
 # CARD
 Newshow=Création d'un spectacle
