@@ -383,6 +383,12 @@ class modshow extends DolibarrModules
 
 		$result=$this->_load_tables('/show/sql/');
 
+        // Create extrafields
+        include_once DOL_DOCUMENT_ROOT.'/core/class/extrafields.class.php';
+        $extrafields = new ExtraFields($this->db);
+
+        $result1=$extrafields->addExtraField('mention', "Mention spécifique", 'text', 1,  2000, 'propal',   0, 0, '', '', 1, '', -1, 0);
+
 		return $this->_init($sql, $options);
 	}
 
