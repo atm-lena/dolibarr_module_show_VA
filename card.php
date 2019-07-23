@@ -237,10 +237,9 @@ if ($action == 'create')
     include DOL_DOCUMENT_ROOT . '/core/tpl/extrafields_add.tpl.php';
 
     // Category attribute
-    if ($conf->categorie->enabled) {
-        print '<tr><td>'.$langs->trans("Categories").'</td><td colspan="3">';
+    $cat = new showcategory($db);
+    if($cat->fetchAll('ASC', '', 0, 0, array('customsql' => 'active=1'), 'AND')) {
         print select_all_categories();
-        print "</td></tr>";
     }
 
     print '<input type="hidden" id="fk_product" name="fk_product" value='.$product.'>';
@@ -287,10 +286,9 @@ else
             include DOL_DOCUMENT_ROOT . '/core/tpl/extrafields_edit.tpl.php';
 
             // Category attribute
-            if ($conf->categorie->enabled) {
-                print '<tr><td>'.$langs->trans("Categories").'</td><td colspan="3">';
+            $cat = new showcategory($db);
+            if($cat->fetchAll('ASC', '', 0, 0, array('customsql' => 'active=1'), 'AND')) {
                 print select_all_categories($object->fk_c_show_category);
-                print "</td></tr>";
             }
 
             print '</table>';
@@ -315,18 +313,18 @@ else
 
             $linkback = '<a href="' .dol_buildpath('/show/list.php', 1) . '?restore_lastsearch_values=1">' . $langs->trans('BackToList') . '</a>';
 
-            $morehtmlref='<div class="refidno">';
-            /*
-            // Ref bis
-            $morehtmlref.=$form->editfieldkey("RefBis", 'ref_client', $object->ref_client, $object, $user->rights->show->write, 'string', '', 0, 1);
-            $morehtmlref.=$form->editfieldval("RefBis", 'ref_client', $object->ref_client, $object, $user->rights->show->write, 'string', '', null, null, '', 1);
-            // Thirdparty
-            $morehtmlref.='<br>'.$langs->trans('ThirdParty') . ' : ' . $soc->getNomUrl(1);
-            */
-            $morehtmlref.='</div>';
-
-
-            $morehtmlstatus.=$object->getLibStatut(2);
+//            $morehtmlref='<div class="refidno">';
+//            /*
+//            // Ref bis
+//            $morehtmlref.=$form->editfieldkey("RefBis", 'ref_client', $object->ref_client, $object, $user->rights->show->write, 'string', '', 0, 1);
+//            $morehtmlref.=$form->editfieldval("RefBis", 'ref_client', $object->ref_client, $object, $user->rights->show->write, 'string', '', null, null, '', 1);
+//            // Thirdparty
+//            $morehtmlref.='<br>'.$langs->trans('ThirdParty') . ' : ' . $soc->getNomUrl(1);
+//            */
+//            $morehtmlref.='</div>';
+//
+//
+//            $morehtmlstatus.=$object->getLibStatut(2);
             dol_banner_tab($object, 'ref', $linkback, 1, 'ref', 'ref', $morehtmlref, '', 0, '', $morehtmlstatus);
 
             print '<div class="fichecenter">';
@@ -444,16 +442,16 @@ else
             }
             print '</div>'."\n";
 
-            print '<div class="fichecenter"><div class="fichehalfleft">';
-            $linktoelem = $form->showLinkToObjectBlock($object, null, array($object->element));
-            $somethingshown = $form->showLinkedObjectBlock($object, $linktoelem);
-
-            print '</div><div class="fichehalfright"><div class="ficheaddleft">';
-
-            // List of actions on element
-            include_once DOL_DOCUMENT_ROOT . '/core/class/html.formactions.class.php';
-            $formactions = new FormActions($db);
-            $somethingshown = $formactions->showactions($object, $object->element, $socid, 1);
+//            print '<div class="fichecenter"><div class="fichehalfleft">';
+//            $linktoelem = $form->showLinkToObjectBlock($object, null, array($object->element));
+//            $somethingshown = $form->showLinkedObjectBlock($object, $linktoelem);
+//
+//            print '</div><div class="fichehalfright"><div class="ficheaddleft">';
+//
+//            // List of actions on element
+//            include_once DOL_DOCUMENT_ROOT . '/core/class/html.formactions.class.php';
+//            $formactions = new FormActions($db);
+//            $somethingshown = $formactions->showactions($object, $object->element, $socid, 1);
 
             print '</div></div></div>';
 
@@ -464,43 +462,45 @@ else
 
 function select_all_categories($selected=''){
 
-    global $db, $langs;
+    global $db, $langs, $conf;
 
-    $category = new showcategory($db);
+    if ($conf->categorie->enabled) {
 
-    $i = 0;
-    foreach($category->fetchAll() as $line) {
-        $categories[$i]['label'] = $line->label;
-        $categories[$i]['id'] = $line->id;
-        $i++;
-    }
+        $output = '<tr><td>' . $langs->trans("Categories") . '</td><td colspan="3">';
 
-    $output = '<select class="flat" name="fk_c_show_category" id="fk_c_show_category">';
+        $category = new showcategory($db);
 
-    if (is_array($categories))
-    {
-        if (! count($categories)) $output.= '<option value="0" disabled>'.$langs->trans("NoCategoriesDefined").'</option>';
-        else
-        {
-            $output.= '<option value="0">&nbsp;</option>';
-            foreach($categories as $key => $value)
-            {
-                if ($categories[$key]['id'] == $selected || ($selected == 'auto' && count($categories) == 1))
-                {
-                    $add = 'selected ';
+        $i = 0;
+        foreach ($category->fetchAll('ASC', '', 0, 0, array('customsql' => 'active=1'), 'AND') as $line) {
+            $categories[$i]['label'] = $line->label;
+            $categories[$i]['id'] = $line->id;
+            $i++;
+        }
+
+        $output .= '<select class="flat" name="fk_c_show_category" id="fk_c_show_category">';
+
+        if (is_array($categories)) {
+            if (!count($categories)) $output .= '<option value="0" disabled>' . $langs->trans("NoCategoriesDefined") . '</option>';
+            else {
+                $output .= '<option value="0">&nbsp;</option>';
+                foreach ($categories as $key => $value) {
+                    if ($categories[$key]['id'] == $selected || ($selected == 'auto' && count($categories) == 1)) {
+                        $add = 'selected ';
+                    } else {
+                        $add = '';
+                    }
+                    $output .= '<option ' . $add . 'value="' . $categories[$key]['id'] . '">' . dol_trunc($categories[$key]['label'], 64, 'middle') . '</option>';
                 }
-                else
-                {
-                    $add = '';
-                }
-                $output.= '<option '.$add.'value="'.$categories[$key]['id'].'">'.dol_trunc($categories[$key]['label'],64,'middle').'</option>';
             }
         }
-    }
-    $output.= '</select>';
-    $output.= "\n";
+        $output .= '</select>';
+        $output .= "\n";
+        $output .= "</td></tr>";
 
-    return $output;
+        return $output;
+    }
+
+    return 0;
 }
 
 llxFooter();

@@ -63,6 +63,8 @@ class show extends SeedObject
 	/** @var string $element Name of the element (tip for better integration in Dolibarr: this value should be the reflection of the class name with ucfirst() function) */
 	public $element = 'show';
 
+	public $picto = 'show@show';
+
 	/** @var int $isextrafieldmanaged Enable the fictionalises of extrafields */
     public $isextrafieldmanaged = 0;
 
@@ -299,8 +301,8 @@ class show extends SeedObject
 
         $linkend='</a>';
 
-        $picto='generic';
-//        $picto='show@show';
+//        $picto='generic';
+        $picto='show@show';
 
         if ($withpicto) $result.=($link.img_object($label, $picto, 'class="classfortooltip"').$linkend);
         if ($withpicto && $withpicto != 2) $result.=' ';
@@ -334,7 +336,7 @@ class show extends SeedObject
      */
     public function getLibStatut($mode = 0)
     {
-        return self::LibStatut($this->status, $mode);
+        return '';
     }
 
     /**

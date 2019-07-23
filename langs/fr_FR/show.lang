@@ -52,3 +52,14 @@ SHOW_DEFAULTPRICE = Prix par défaut spectacle
 
 #BUTTONS
 NewShow = Nouveau spectacle
+
+#DICTIONNARY
+Default_price = Prix par défaut
+
+#
+#POP-UP
+#
+ConfirmDeleteshowTitle= Supprimer un spectacle
+ConfirmCloneshowTitle = Cloner un spectacle
+ConfirmDeleteshowBody = Etes-vous sûr de vouloir supprimer ce spectacle ?
+ConfirmCloneshowBody = Etes-vous sûr de vouloir cloner ce spectacle ?
