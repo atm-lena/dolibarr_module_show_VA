@@ -81,7 +81,7 @@ class modshow extends DolibarrModules
 									'theme' => 0,                                    	// Set this to 1 if module has its own theme directory (theme)
 		                        	'tpl' => 0,                                      	// Set this to 1 if module overwrite template dir (core/tpl)
 									'barcode' => 0,                                  	// Set this to 1 if module has its own barcode directory (core/modules/barcode)
-									'models' => 0,                                   	// Set this to 1 if module has its own models directory (core/modules/xxx)
+									'models' => 1,                                   	// Set this to 1 if module has its own models directory (core/modules/xxx)
 									'css' => array('/show/css/show.css.php'),	// Set this to relative path of css file if module has its own css file
 	 								'js' => array('/show/js/show.js'),          // Set this to relative path of js file if module must load a js on all pages
 									'hooks' => array('productcard'),  	// Set here all hooks context managed by module
@@ -388,6 +388,8 @@ class modshow extends DolibarrModules
         $extrafields = new ExtraFields($this->db);
 
         $result1=$extrafields->addExtraField('mention', "Mention spécifique", 'text', 1,  2000, 'propal',   0, 0, '', '', 1, '', -1, 0);
+
+//        $sql=array("INSERT INTO ".MAIN_DB_PREFIX."document_model (nom, type, entity) VALUES('azur_mentionva','propal',1)");
 
 		return $this->_init($sql, $options);
 	}
