@@ -88,6 +88,8 @@ if (empty($reshook))
                 }
             }
 
+            $_REQUEST['date'] .=  ' '.(GETPOST('datehour','int')-2).':'.GETPOST('datemin').':'.GETPOST('datesec');
+
             $object->setValues($_REQUEST);
 
         case 'update':
@@ -102,6 +104,8 @@ if (empty($reshook))
                     $_REQUEST['price'] = $conf->global->SHOW_DEFAULTPRICE;
                 }
             }
+
+            $_REQUEST['date'] .=  ' '.(GETPOST('datehour','int')-2).':'.GETPOST('datemin').':'.GETPOST('datesec');
 
 			$object->setValues($_REQUEST); // Set standard attributes
 
