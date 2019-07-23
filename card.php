@@ -32,7 +32,7 @@ $id = GETPOST('id', 'int');
 $ref = GETPOST('ref');
 $price = GETPOST('price');
 $category = GETPOST('show_category');
-$product = GETPOST('product');
+$product = GETPOST('product', 'int');
 
 $contextpage = GETPOST('contextpage', 'aZ') ? GETPOST('contextpage', 'aZ') : 'showcard';   // To manage different context of search
 $backtopage = GETPOST('backtopage', 'alpha');
@@ -242,6 +242,8 @@ if ($action == 'create')
         print select_all_categories();
         print "</td></tr>";
     }
+
+    print '<input type="hidden" id="fk_product" name="fk_product" value='.$product.'>';
 
     print '</table>'."\n";
 

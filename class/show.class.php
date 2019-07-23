@@ -82,6 +82,7 @@ class show extends SeedObject
         'price'         =>array('type'=>'double(24,8)', 'label'=>'Price',            'enabled'=>1, 'visible'=>1, 'notnull'=>-1, 'position'=>41, 'css'=>'minwidth200'),
         'date'         => array('type'=>'datetime', 'label'=>'Date', 'enabled'=>1, 'visible'=>1, 'position'=>32, 'notnull'=>-1, 'comment'=>"Date of show",),
         'fk_c_show_category' 		=>array('type'=>'integer', 'label'=>'Category', 'visible'=>0, 'enabled'=>1, 'position'=>50),
+        'fk_product' 		=>array('type'=>'integer', 'label'=>'Product', 'visible'=>0, 'enabled'=>1, 'position'=>51),
     );
 
     /** @var string $ref Object reference */
@@ -103,6 +104,8 @@ class show extends SeedObject
     public $date;
 
     public $fk_c_show_category;
+
+    public $fk_product;
 
 
 
@@ -368,6 +371,75 @@ class show extends SeedObject
         }
         
         return $res;
+    }
+
+    public function fetchAll($sortorder='', $sortfield='', $limit=0, $offset=0, array $filter=array(), $filtermode='AND')
+    {
+        global $conf;
+
+        dol_syslog(__METHOD__, LOG_DEBUG);
+
+        $records=array();
+
+        $sql = 'SELECT';
+        $sql .= ' t.rowid';
+        // TODO Get all fields
+        $sql .= ' FROM ' . MAIN_DB_PREFIX . $this->table_element. ' as t';
+        $sql .= ' WHERE 1=1';
+        // Manage filter
+        $sqlwhere = array();
+        if (count($filter) > 0) {
+
+            foreach ($filter as $key => $value) {
+                if ($key=='t.rowid') {
+                    $sqlwhere[] = $key . '='. $value;
+                }
+                elseif (strpos($key,'date') !== false) {
+                    $sqlwhere[] = $key.' = \''.$this->db->idate($value).'\'';
+                }
+                elseif ($key=='customsql') {
+                    $sqlwhere[] = $value;
+                }
+                else {
+                    $sqlwhere[] = $key . ' LIKE \'%' . $this->db->escape($value) . '%\'';
+                }
+            }
+        }
+        if (count($sqlwhere) > 0) {
+            $sql .= ' AND (' . implode(' '.$filtermode.' ', $sqlwhere).')';
+        }
+
+        if (!empty($sortfield)) {
+            $sql .= $this->db->order($sortfield, $sortorder);
+        }
+        if (!empty($limit)) {
+            $sql .=  ' ' . $this->db->plimit($limit, $offset);
+        }
+        print_r($sql);
+        $resql = $this->db->query($sql);
+        if ($resql) {
+
+            $num = $this->db->num_rows($resql);
+
+            while ($obj = $this->db->fetch_object($resql))
+            {
+                $record = new self($this->db);
+
+                $record->id = $obj->rowid;
+                // TODO Get other fields
+
+                //var_dump($record->id);
+                $records[$record->id] = $record;
+            }
+            $this->db->free($resql);
+
+            return $records;
+        } else {
+            $this->errors[] = 'Error ' . $this->db->lasterror();
+            dol_syslog(__METHOD__ . ' ' . join(',', $this->errors), LOG_ERR);
+
+            return -1;
+        }
     }
 }
 
