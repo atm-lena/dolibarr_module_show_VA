@@ -73,7 +73,7 @@ class show extends SeedObject
 
 
     public $fields = array(
-		'ref'           =>array('type'=>'varchar(50)',  'length'=>50, 'label'=>'Ref','enabled'=>1, 'visible'=>1,  'notnull'=>1, 'showoncombobox'=>1, 'index'=>1, 'position'=>10, 'searchall'=>1, 'comment'=>'Reference of object'),
+		'ref'           =>array('type'=>'varchar(50)',  'length'=>50, 'label'=>'Ref','enabled'=>1, 'visible'=>1,  'notnull'=>1, 'showoncombobox'=>1, 'index'=>1, 'position'=>10, 'searchall'=>1, 'comment'=>'Reference of object', 'index'=>true),
 	    'entity'        =>array('type'=>'integer',      'label'=>'Entity',           'enabled'=>1, 'visible'=>0,  'default'=>1, 'notnull'=>1,  'index'=>1, 'position'=>20),
 	    'status'        =>array('type'=>'integer',      'label'=>'Status',           'enabled'=>1, 'visible'=>0,  'notnull'=>1, 'default'=>0, 'index'=>1,  'position'=>30, 'arrayofkeyval'=>array(0=>'Draft', 1=>'Active', -1=>'Canceled')),
 	    'label'         =>array('type'=>'varchar(255)', 'label'=>'Label',            'enabled'=>1, 'visible'=>1,  'position'=>40,  'searchall'=>1, 'css'=>'minwidth200', 'showoncombobox'=>1),
@@ -133,6 +133,19 @@ class show extends SeedObject
      */
     public function save($user)
     {
+        global $langs;
+
+        if($this->ref == '')
+        {
+            setEventMessages($langs->trans("ErrorFieldRequired",$langs->transnoentitiesnoconv('Ref')), null, 'errors');
+            if(!$this->id){
+                header('Location: '.dol_buildpath('/show/card.php', 1).'?action=create');
+            } else {
+                header('Location: ' . dol_buildpath('/show/card.php', 1) . '?id=' . $this->id . '&action=edit');
+            }
+            exit;
+        }
+
         if (!empty($this->is_clone))
         {
             // TODO determinate if auto generate
