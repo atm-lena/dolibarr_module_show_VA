@@ -33,6 +33,7 @@ $ref = GETPOST('ref');
 $price = GETPOST('price');
 $category = GETPOST('fk_c_show_category');
 $product = GETPOST('product', 'int');
+$hour = GETPOST('datehour', 'int');
 
 $contextpage = GETPOST('contextpage', 'aZ') ? GETPOST('contextpage', 'aZ') : 'showcard';   // To manage different context of search
 $backtopage = GETPOST('backtopage', 'alpha');
@@ -88,7 +89,10 @@ if (empty($reshook))
                 }
             }
 
-            $_REQUEST['date'] .=  ' '.(GETPOST('datehour','int')-2).':'.GETPOST('datemin').':'.GETPOST('datesec');
+		    //Gestion decalage de 2 h
+		    if($hour){
+		        $_REQUEST['datehour'] = $hour-2 ;
+            }
 
             $object->setValues($_REQUEST);
 
@@ -105,7 +109,10 @@ if (empty($reshook))
                 }
             }
 
-            $_REQUEST['date'] .=  ' '.(GETPOST('datehour','int')-2).':'.GETPOST('datemin').':'.GETPOST('datesec');
+            //Gestion decalage de 2 h
+            if($hour){
+                $_REQUEST['datehour'] = $hour-2 ;
+            }
 
 			$object->setValues($_REQUEST); // Set standard attributes
 
